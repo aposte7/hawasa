@@ -184,6 +184,28 @@ contract PostManager {
         emit CommentDeleted(_commentId, block.timestamp);   
     }
 
+     function getPosts(uint256 _offset, uint256 _limit) external view returns (Post[] memory) {
+        uint256 totalPosts = allPosts.length;
+
+        if (_offset >= totalPosts) {
+            return new Post[](0);
+        }
+
+        uint256 end = _offset + _limit;
+        if (end > totalPosts) {
+            end = totalPosts;
+        }
+
+        uint256 resultSize = end - _offset;
+
+        Post[] memory paginatedPost = new Post[](resultSize);
+        for (uint256 i = 0; i < resultSize; i++) {
+            paginatedPost[i] = allPosts[_offset + i];
+        }
+        
+        return paginatedPost;
+}
+
     function getCommentsByPost(uint256 _postId, uint256 _offset, uint256 _limit) external view returns (Comment[] memory) {
         require(_postExists(_postId), "Post does not exist");
 
