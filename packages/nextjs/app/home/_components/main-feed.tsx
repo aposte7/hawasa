@@ -1,6 +1,7 @@
 "use client";
 
 import PostComponent from "./post";
+import PostComposer from "./post-composer";
 
 const MOCK_POSTS = [
   {
@@ -65,13 +66,22 @@ const MOCK_POSTS = [
   },
 ];
 
-export default function MainFeed() {
+interface MainFeedProps {
+  isWalletConnected?: boolean;
+  walletAddress?: string | null;
+}
+
+export default function MainFeed({ isWalletConnected, walletAddress }: MainFeedProps) {
   return (
     <div className="flex-1 border-r border-border max-w-2xl overflow-y-auto">
       {/* Sticky Header */}
       <div className="sticky top-0 bg-background/70 backdrop-blur-md border-b border-border px-6 py-4 z-20">
         <h2 className="text-xl font-bold text-foreground">Home</h2>
         <p className="text-xs text-muted-foreground mt-1">Welcome to Nexus, the Web3 social network</p>
+      </div>
+
+      <div className="sticky top-20 bg-background/70 backdrop-blur-md border-b border-border z-10">
+        {isWalletConnected && <PostComposer walletAddress={walletAddress} />}
       </div>
 
       {/* Posts Feed */}
